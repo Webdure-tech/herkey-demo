@@ -1,0 +1,4 @@
+[MESSAGES CONTROL]
+disable=C0411,  # Import order
+        C0114,  # Missing module docstring
+        c0115,  # Missing class docstring
