@@ -258,3 +258,7 @@ def create_agora_token(request):
     role = 'host' if event_participant.type == "HOST" else 'audience'
     token = create_agora_rtc_token_publisher(channel_name, user_id, role)
     return Response(token)
+
+@api_view(['GET'])
+def health_check(request):
+    return JsonResponse({"status": "healthy"})

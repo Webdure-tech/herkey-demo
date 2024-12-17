@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib import admin
 from rest_framework import routers
-from core.views import EventViewSet, EventParticipantViewSet, EventAttachmentViewSet,UserViewSet, get_pre_signed_url, create_agora_token
+from core.views import EventViewSet, EventParticipantViewSet, EventAttachmentViewSet,UserViewSet, get_pre_signed_url, create_agora_token, health_check
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -22,5 +22,6 @@ urlpatterns = [
     path('api/event-attachments/get_pre_signed_url/', get_pre_signed_url, name='get_pre_signed_url'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/agora-token/', create_agora_token, name='agora_token')
+    path('api/agora-token/', create_agora_token, name='agora_token'),
+    path('health/', health_check, name='health_check'),
 ]
