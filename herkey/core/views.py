@@ -230,14 +230,14 @@ def get_pre_signed_url(request):
         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
         region_name=settings.AWS_REGION
     )
-
+    fields=None
+    conditions=None
     try:
-        signed_url = s3_client.generate_presigned_url(
-            'put_object',
-            Params={
-                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                'Key': cloud_id
-            },
+        signed_url = s3_client.generate_presigned_post(
+            settings.AWS_STORAGE_BUCKET_NAME,
+            cloud_id,
+            Fields=fields,
+             Conditions=conditions,
             ExpiresIn=3600  # URL expiration time in seconds
         )
         return Response({"signed_url": signed_url, "cloud_id": cloud_id})
