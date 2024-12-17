@@ -1,8 +1,8 @@
-from . import models
-from django.contrib.auth.models import User
 import boto3
-from django.conf import settings 
+from django.conf import settings
 from rest_framework import serializers
+
+from . import models
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

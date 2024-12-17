@@ -1,19 +1,26 @@
+import boto3
 from json import JSONDecodeError
+from uuid import UUID, uuid4
+
+from django.conf import settings
 from django.contrib.auth.models import User
-from .serializers import UserSerializer
 from django.http import JsonResponse
-from .serializers import EventSerializer, EventParticipantsSerializer, EventAttachmentSerializer
-from rest_framework.parsers import JSONParser
-from rest_framework import viewsets, status
-from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+
+from rest_framework import status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from .agora import create_agora_rtc_token_publisher
 from .models import Event, EventParticipant, EventAttachment
-import boto3
-from django.conf import settings
-from uuid import UUID, uuid4
-from rest_framework.permissions import IsAuthenticated
+from .serializers import (
+    EventSerializer,
+    EventParticipantsSerializer,
+    EventAttachmentSerializer,
+    UserSerializer
+)
 
 
 
@@ -250,12 +257,14 @@ def get_pre_signed_url(request):
 def create_agora_token(request):
     """Create an Agora RTC token for a publisher."""
     data = JSONParser().parse(request)
+    username = request.user
     channel_name = data.get('event_id')
-    user_id = data.get('user_id')
     event = get_object_or_404(Event, id=channel_name)
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(User, username=username)
+    serializer = UserSerializer(user)
     event_participant = get_object_or_404(EventParticipant, event=event, user=user)
     role = 'host' if event_participant.type == "HOST" else 'audience'
+    user_id = serializer.data.get('id')
     token = create_agora_rtc_token_publisher(channel_name, user_id, role)
     return Response(token)
 

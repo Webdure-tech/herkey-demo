@@ -1,10 +1,16 @@
-from django.urls import path, include
 from django.contrib import admin
+from django.urls import path, include
 from rest_framework import routers
-from core.views import EventViewSet, EventParticipantViewSet, EventAttachmentViewSet,UserViewSet, get_pre_signed_url, create_agora_token, health_check
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from core.views import (
+    EventViewSet,
+    EventParticipantViewSet,
+    EventAttachmentViewSet,
+    UserViewSet,
+    get_pre_signed_url,
+    create_agora_token,
+    health_check
 )
 
 router = routers.DefaultRouter()
