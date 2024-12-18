@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from utils.model_abstract import Model
 from django_extensions.db.models import (
-	TimeStampedModel, 
+	TimeStampedModel,
 	ActivatorModel,
 	TitleDescriptionModel
 )

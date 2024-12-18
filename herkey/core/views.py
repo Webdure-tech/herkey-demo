@@ -12,6 +12,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .agora import create_agora_rtc_token_publisher
 from .models import Event, EventParticipant, EventAttachment
@@ -19,7 +20,8 @@ from .serializers import (
     EventSerializer,
     EventParticipantsSerializer,
     EventAttachmentSerializer,
-    UserSerializer
+    UserSerializer,
+    CustomTokenObtainPairSerializer
 )
 
 
@@ -213,12 +215,14 @@ class EventAttachmentViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except JSONDecodeError:
             return JsonResponse({"result": "error","message": "Json decoding error"}, status= 400)
-        
-
+    
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
         
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

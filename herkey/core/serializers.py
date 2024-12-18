@@ -1,6 +1,7 @@
 import boto3
 from django.conf import settings
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from . import models
 
@@ -100,3 +101,21 @@ class EventSerializer(serializers.ModelSerializer):
             'participants',
             'attachments'
         )
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user = self.user
+        data["user"] = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name
+        }
+        return data
