@@ -1,5 +1,7 @@
-from agora_token_builder import RtcTokenBuilder
+""" This module provides functions to generate Agora RTC tokens. """
 import time
+
+from agora_token_builder import RtcTokenBuilder
 from django.conf import settings
 
 def create_agora_rtc_token_publisher(channel_name, uid=None, role='host', expire_time=86400):

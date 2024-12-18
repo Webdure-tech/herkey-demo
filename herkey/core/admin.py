@@ -1,3 +1,6 @@
+"""
+Admin panel for Event, EventParticipant and EventAttachment models
+"""
 from django.contrib import admin
 from .models import Event, EventParticipant, EventAttachment
 

@@ -1,6 +1,9 @@
-import boto3
+""" Views for the core app. """
+
 from json import JSONDecodeError
 from uuid import UUID, uuid4
+import boto3
+
 
 from django.conf import settings
 from django.contrib.auth.models import User

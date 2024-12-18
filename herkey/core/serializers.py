@@ -1,3 +1,4 @@
+""" Serializers for the core app. """
 import boto3
 from django.conf import settings
 from rest_framework import serializers
