@@ -23,9 +23,6 @@ router.register(r'event-participants', EventParticipantViewSet, basename='event-
 router.register(r'event-attachments', EventAttachmentViewSet, basename='event-attachment')
 router.register(r'users', UserViewSet, basename='user')
 
-# Assign the router URLs to urlpatterns
-urlpatterns = router.urls
-
 # Define additional URL patterns
 urlpatterns = [
     path('admin/', admin.site.urls), # Admin site

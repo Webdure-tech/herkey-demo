@@ -132,7 +132,7 @@ class EventParticipantViewSet(viewsets.ViewSet):
     """
     serializer_class = EventParticipantsSerializer
     permission_classes = [IsAuthenticated]
-
+    
     def get_serializer_context(self):
         """"
         Extra context provided to the serializer class."""
@@ -165,13 +165,27 @@ class EventParticipantViewSet(viewsets.ViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except JSONDecodeError:
             return JsonResponse({"result": "error","message": "Json decoding error"}, status= 400)
+
+    def list(self, request):
+        """"
+        Return all event entries."""
+        event_participants = EventParticipant.objects.all()
+        serializer = EventParticipantsSerializer(event_participants, many=True)
+        return Response(serializer.data)
     
-    def delete(self, request):
+    def retrieve(self, request, pk=None):
+        """Retrieve a single event entry by ID."""
+        if not isinstance(pk, UUID):
+            pk = UUID(pk)
+        event_participant = get_object_or_404(EventParticipant, pk=pk)
+        serializer = EventParticipantsSerializer(event_participant)
+        return Response(serializer.data)
+    
+    def destroy(self, request, pk=None):
         """"
         Delete an existing event participant entry."""
         try:
-            data = JSONParser().parse(request)
-            event_participant = EventParticipant.objects.get(id=data['id'])
+            event_participant = get_object_or_404(EventParticipant, id=pk)
             event_participant.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except JSONDecodeError:
