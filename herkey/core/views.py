@@ -153,10 +153,15 @@ class EventParticipantViewSet(viewsets.ViewSet):
         Create a new event participant entry."""
         try:
             data = JSONParser().parse(request)
+            username = request.user.username
+            user = get_object_or_404(User, username=username)
+            event_id = data.get('event')
+            event = get_object_or_404(Event, id=event_id)
             serializer = EventParticipantsSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
-                serializer.save()
+                serializer.save(user=user, event=event)
                 return Response(serializer.data)
+            print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except JSONDecodeError:
             return JsonResponse({"result": "error","message": "Json decoding error"}, status= 400)
