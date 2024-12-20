@@ -157,6 +157,8 @@ class EventParticipantViewSet(viewsets.ViewSet):
             user = get_object_or_404(User, username=username)
             event_id = data.get('event')
             event = get_object_or_404(Event, id=event_id)
+            if EventParticipant.objects.filter(user=user, event=event).exists():
+                return JsonResponse({"result": "error", "message": "Participant already exists for this event"}, status=400)
             serializer = EventParticipantsSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save(user=user, event=event)
