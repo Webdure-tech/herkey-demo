@@ -17,7 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .agora import create_agora_rtc_token_publisher
+from .agora import create_agora_rtc_token_publisher, create_agora_rtm_token_publisher
 from .models import Event, EventParticipant, EventAttachment
 from .serializers import (
     EventSerializer,
@@ -293,8 +293,9 @@ def create_agora_token(request):
     event_participant = get_object_or_404(EventParticipant, event=event, user=user)
     role = 'host' if event_participant.type == "HOST" else 'audience'
     user_id = serializer.data.get('id')
-    token = create_agora_rtc_token_publisher(channel_name, user_id, role)
-    return Response(token)
+    rtc_token = create_agora_rtc_token_publisher(channel_name, user_id, role)
+    rtm_token = create_agora_rtm_token_publisher(channel_name, user_id, role)
+    return Response({"rtc_token": rtc_token, "rtm_token": rtm_token})
 
 @api_view(['GET'])
 def health_check(request):
